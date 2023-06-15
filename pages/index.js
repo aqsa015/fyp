@@ -1,29 +1,54 @@
-import Image from 'next/image'
+import Image  from 'next/image'
+import {useEffect,useState} from 'react'
 import { Inter } from 'next/font/google'
-import {useEffect} from 'react'
+
 //import styles from '../styles/Home.module.css'
 import tw from 'tailwind-styled-components'
 //import  mapboxgl from '!mapbox-gl';
 import Map from './components/Map'
+import Head from './components/Header'
 import Link from 'next/link'
+import {auth} from '../firebase'
+import {onAuthStateChanged,signOut} from 'firebase/auth'
+import {useRouter} from 'next/router'
+
+
+
+
 const inter = Inter({ subsets: ['latin'] })
 
 //mapboxgl.accessToken='pk.eyJ1IjoiYXFzYTAxNSIsImEiOiJjbGllaGx2dzgwMW02M2RvMTFoMDI2ZWhuIn0.AZhpoBF3AnJiBViBg_i3hw'
 export default function Home() {
 
-  
+  const[user,setUser]=useState(null)
+  const router=useRouter()
+  useEffect(()=>{
+    return onAuthStateChanged(auth, user=>{
+      if(user){
+        setUser({
+          name:user.displayName,
+          photoUrl:user.photoURL,
+
+        })
+      }else{
+        setUser(null)
+        router.push('./log')
+      }
+    })
+  },[])
  
   return (
     <>
-    
+    <Head/>
+    {/*//https://i.ibb.co/84stgjq/uber-technologies-new-20218114.jpg */}
     <Wrapper>
       <Map/>
       <ActionItem> 
       <Header>
-       <Logo src="https://i.ibb.co/84stgjq/uber-technologies-new-20218114.jpg "/> 
+       <Logo src={""}/> 
       <Profile>
-        <Name>Aqsa Zulfiqar </Name>
-        <UserImage src='https://img.freepik.com/free-photo/young-beautiful-woman-pink-warm-sweater-natural-look-smiling-portrait-isolated-long-hair_285396-896.jpg?size=626&ext=jpg'
+        <Name>{user && user.name} </Name>
+        <UserImage src={user && user.photoUrl} onClick={()=>signOut(auth)}
 
         />
       </Profile>
@@ -33,19 +58,15 @@ export default function Home() {
       <ActionButton>
       
         
-        <ActionButtonImage src="https://i.ibb.co/cyvcpfF/uberx.png"/>
-        Ride
+        <ActionButtonImage src="./pics/plus-icon.png" />
+      
         </ActionButton></Link>
         
-        <ActionButton>
-        <ActionButtonImage src="https://i.ibb.co/n776JLm/bike.png"/>
-          2-Wheels</ActionButton>
-        <ActionButton>
-        <ActionButtonImage src="https://i.ibb.co/5RjchBg/uberschedule.png"/>
-          Result</ActionButton>
+       
       </ActionButtons>
-      
-      <InputButton>Where To?</InputButton>
+      <Link href="/search">
+      <InputButton src="./pics/hospital.png">Choose Hospital</InputButton>
+      </Link>
       </ActionItem>
     </Wrapper>
     </>
@@ -53,17 +74,17 @@ export default function Home() {
 }
 
 const InputButton=tw.div`
- h-20 bg-gray-200 p-4 flex items-center mt-8 justify-center
+ h-2 bg-cyan-700 p-8 flex items-center mt-8 justify-center text-white my-6 mx-4 border-t-2 text-xl border-round hover:bg-cyan-600 
  `
 const ActionButtonImage=tw.img`
-h-3/5
+h-3/5 rounded-full
 `
 const ActionButton=tw.div`
-flex bg-gray-200 flex-1 m-1 h-32 items-center flex-col justify-center rounded-lg transform hover:scale-105 text-xl
-
+flex flex-1 m-1  items-center flex-col justify-center rounded-lg transform hover:scale-105 text-xl
+rounded-full
 `
 const ActionButtons=tw.div`
-flex
+flex  rounded-full justify-center
 `
 const Profile=tw.div`
 flex items-center
@@ -73,7 +94,8 @@ const Name=tw.div`
 mr-4 w-20 text-small
 `
 const UserImage=tw.img`
-h-12 w-12 rounded-full border border-gray-200 p-px
+h-12 w-12 rounded-full border border-gray-200 p-px cursor-pointer
+
 `
 const Logo=tw.img`h-28`
 const Wrapper= tw.div` 
@@ -81,8 +103,8 @@ flex flex-col bg-red-400 h-screen`
 
 
 const ActionItem=tw.div`
-flex-1 p-4 bg-gray-500
+flex-1 p-4 bg-white
 `
 const Header= tw.div  `
-flex justify-between items-center
+flex justify-between items-center 
 `

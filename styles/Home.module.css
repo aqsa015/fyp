@@ -1,19 +1,18 @@
-.container{
-padding: 0 2rem;
-height: 100vh;
 
-display: flex;
-flex-direction: column;
-background-color: blue;
-
-
-}
 .map{
 background-color: red;
-flex: 0.5;
+flex :2/3;
 }
 .start{
-    background-color: #4a8291;;
-    flex: 0.5;
+    background-color: #cbe7ff;
+    flex: 1/3;
 
+}
+.ActionButton{
+     background-color: cadetblue!important; 
+     
+    
+}
+.InputButton{
+    background-color: #0891b2!important;
 }

@@ -1,8 +1,11 @@
-import React from 'react'
+import {useState} from 'react'
 import tw from 'tailwind-styled-components'
 import Link from 'next/link'
 
 const search = () => {
+
+  const[pickup,setPickup]=useState("");
+  const[dropof,setDropof]=useState("");
   return (
     
     <Wrapper>
@@ -26,8 +29,14 @@ const search = () => {
             <Square src='https://static.vecteezy.com/system/resources/previews/001/209/957/original/square-png.png'/>
         </FromToIcons>
         <InputBoxes> 
-        <Input placeholder='enter pickup location'/>
-        <Input placeholder='where to? '/>
+        <Input placeholder='enter pickup location'
+        value={pickup}
+        onChange={(e)=>setPickup(e.target.value)}/>
+        <Input placeholder='where to? '
+        value={dropof}
+        onChange={(e)=>setDropof(e.target.value)}
+
+        />
         </InputBoxes>
         <PlusIcon src="https://www.freepnglogos.com/uploads/plus-icon/plus-icon-plus-math-icon-download-icons-9.png"/>
         </InputContainer>
@@ -36,7 +45,15 @@ const search = () => {
 
 
         </SavedPlaces>
+        <Link href={{
+          pathname:'/confirm',
+          query:{
+            pickup:pickup,
+            dropof:dropof
+          }
+        }}>
         <ConfirmButon>Confirm Location</ConfirmButon>
+        </Link>
         {/*saved places */}
         {/*confirm location */}
 
